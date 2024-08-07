@@ -9,6 +9,9 @@
     "start:dist": "node dist/server.js",
     "dev": "nodemon --exec ts-node src/server.ts"
   },
+  "author": "Anmol Mhaiskar",
+  "keywords": [],
+  "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.17.0",
     "@types/dotenv": "^8.2.0",
@@ -23,7 +26,5 @@
     "nodemon": "^3.1.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
-  },
-  "author": "Anmol Mhaiskar",
-  "license": "ISC"
+  }
 }

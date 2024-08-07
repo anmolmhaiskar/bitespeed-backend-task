@@ -18,7 +18,7 @@ model Contact {
   id             Int      @id @default(autoincrement())
   phoneNumber    String?
   email          String?
-  linkedId       Int?
+  linkedId       Int?     @default(null)
   linkPrecedence String   @default("primary")
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
