@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Contact, PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import IdentifyRequestBody from "../types/IdentifyRequestBody";
 
@@ -7,7 +7,7 @@ export const handleIdentifyContact = async (req: Request, res: Response) => {
   const prisma = new PrismaClient();
 
   try {
-    const contacts = await prisma.contact.findMany({
+    const contacts: Contact[] = await prisma.contact.findMany({
       where: {
         OR: [{ email: email }, { phoneNumber: phoneNumber }],
       },
@@ -80,16 +80,20 @@ export const handleIdentifyContact = async (req: Request, res: Response) => {
       const emails = Array.from(
         new Set([
           primaryContact!.email,
-          ...linkedSecondaryontacts.map((c) => c.email),
+          ...linkedSecondaryontacts.map((contact: Contact) => contact.email),
         ])
       );
       const phoneNumbers = Array.from(
         new Set([
           primaryContact!.phoneNumber,
-          ...linkedSecondaryontacts.map((c) => c.phoneNumber),
+          ...linkedSecondaryontacts.map(
+            (contact: Contact) => contact.phoneNumber
+          ),
         ])
       );
-      const secondaryContactIds = linkedSecondaryontacts.map((c) => c.id);
+      const secondaryContactIds = linkedSecondaryontacts.map(
+        (contact: Contact) => contact.id
+      );
 
       return res.json({
         contact: {
@@ -122,16 +126,20 @@ export const handleIdentifyContact = async (req: Request, res: Response) => {
       const emails = Array.from(
         new Set([
           primaryContact!.email,
-          ...linkedSecondaryontacts.map((c) => c.email),
+          ...linkedSecondaryontacts.map((contact: Contact) => contact.email),
         ])
       );
       const phoneNumbers = Array.from(
         new Set([
           primaryContact!.phoneNumber,
-          ...linkedSecondaryontacts.map((c) => c.phoneNumber),
+          ...linkedSecondaryontacts.map(
+            (contact: Contact) => contact.phoneNumber
+          ),
         ])
       );
-      const secondaryContactIds = linkedSecondaryontacts.map((c) => c.id);
+      const secondaryContactIds = linkedSecondaryontacts.map(
+        (contact: Contact) => contact.id
+      );
 
       return res.json({
         contact: {
@@ -169,14 +177,16 @@ export const handleIdentifyContact = async (req: Request, res: Response) => {
       });
 
       await Promise.all(
-        secondaryContactsLinkedToPrimary2.map(async (secondaryContact) => {
-          await prisma.contact.update({
-            where: { id: secondaryContact.id },
-            data: {
-              linkedId: primary1!.id,
-            },
-          });
-        })
+        secondaryContactsLinkedToPrimary2.map(
+          async (secondaryContact: Contact) => {
+            await prisma.contact.update({
+              where: { id: secondaryContact.id },
+              data: {
+                linkedId: primary1!.id,
+              },
+            });
+          }
+        )
       );
 
       console.log(
@@ -212,7 +222,9 @@ export const handleIdentifyContact = async (req: Request, res: Response) => {
           ),
           secondaryContactIds: [
             primary2!.id,
-            ...secondaryContactsLinkedToPrimary2.map((c) => c.id),
+            ...secondaryContactsLinkedToPrimary2.map(
+              (contact: Contact) => contact.id
+            ),
           ],
         },
       });
