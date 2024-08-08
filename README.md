@@ -2,7 +2,7 @@
 
 ## EndPoint
 
-    [Contact Reconciliation](https://bitespeed-backend-task-83rk.onrender.com)
+    Contact Reconciliation Endpoint:  https://bitespeed-backend-task-83rk.onrender.com/identify
 
 This project is an Express TypeScript application using Prisma to handle contact reconciliation. It processes contact data based on email and phone numbers, ensuring data integrity and consistency.
 
@@ -43,8 +43,8 @@ The Contact Reconciliation Assignment handles identifying and creating contacts 
 ### Executing program
 
 Start the application:
-`   npm run dev
-  `
+`  npm run dev
+ `
 
 ### How to Send Requests to API Endpoint
 

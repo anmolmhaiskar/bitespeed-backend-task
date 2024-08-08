@@ -40,9 +40,6 @@ export const handleIdentifyContact = async (req: Request, res: Response) => {
     const primaryContacts = contacts.filter(
       (contact: any) => contact.linkPrecedence === "primary"
     );
-    const secondaryContacts = contacts.filter(
-      (contact: any) => contact.linkPrecedence === "secondary"
-    );
 
     let primaryContact =
       primaryContacts.length > 0
@@ -50,8 +47,10 @@ export const handleIdentifyContact = async (req: Request, res: Response) => {
         : await prisma.contact.findUnique({
             where: { id: contacts[0].linkedId! },
           });
+
     console.log("primaryContacts: ", primaryContacts);
 
+    //find if contact already exists in DB
     const searchedContact = contacts.find((contact: any) =>
       email == null || phoneNumber == null
         ? contact.email == email || contact.phoneNumber == phoneNumber
@@ -59,7 +58,7 @@ export const handleIdentifyContact = async (req: Request, res: Response) => {
     );
 
     if (searchedContact) {
-      console.log("searched contact");
+      console.log("searched contact :", searchedContact);
 
       let originalContact;
       if (searchedContact.linkPrecedence == "secondary") {
@@ -103,8 +102,10 @@ export const handleIdentifyContact = async (req: Request, res: Response) => {
       });
     }
 
+    //if exactly one primary contact exist then create a new secondary contact
     if (primaryContacts.length == 1) {
-      console.log("primaryContacts.length == 1");
+      console.log("only one primary contact exist");
+
       await prisma.contact.create({
         data: {
           email,
@@ -147,6 +148,8 @@ export const handleIdentifyContact = async (req: Request, res: Response) => {
       });
     }
 
+    // if more than one primary contacts exists then apart from the oldest contact
+    // make all the other primary contacts to secondary
     if (primaryContacts.length > 1) {
       console.log("primaryContacts.length > 1");
       const primary1 = primaryContacts.find(
